@@ -45,13 +45,15 @@ public abstract class Classifier {
   public enum Model {
     FLOAT,
     QUANTIZED,
+    PASS
   }
 
   /** The runtime device type used for executing classification. */
   public enum Device {
     CPU,
     NNAPI,
-    GPU
+    GPU,
+    PASS
   }
 
   /** Number of results to show in the UI. */
@@ -94,11 +96,16 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
+    if (device == Device.PASS) {
+      return new ClassifierPass(activity, device, numThreads);
+    }
     if (model == Model.QUANTIZED) {
       return new ClassifierQuantizedMobileNet(activity, device, numThreads);
-    } else {
+    }
+    if (model == Model.FLOAT) {
       return new ClassifierFloatMobileNet(activity, device, numThreads);
     }
+    return new ClassifierPass(activity, device, numThreads);
   }
 
   /** An immutable result returned by a Classifier describing what was recognized. */
@@ -171,6 +178,19 @@ public abstract class Classifier {
     }
   }
 
+  protected Classifier(Activity activity) throws IOException {
+    labels = loadLabelList(activity);
+    imgData =
+            ByteBuffer.allocateDirect(
+                    DIM_BATCH_SIZE
+                            * getImageSizeX()
+                            * getImageSizeY()
+                            * DIM_PIXEL_SIZE
+                            * getNumBytesPerChannel());
+    imgData.order(ByteOrder.nativeOrder());
+    LOGGER.d("Created a Tensorflow Lite Image Classifier.");
+  }
+
   /** Initializes a {@code Classifier}. */
   protected Classifier(Activity activity, Device device, int numThreads) throws IOException {
     tfliteModel = loadModelFile(activity);
@@ -213,7 +233,7 @@ public abstract class Classifier {
   }
 
   /** Memory-map the model file in Assets. */
-  private MappedByteBuffer loadModelFile(Activity activity) throws IOException {
+  protected MappedByteBuffer loadModelFile(Activity activity) throws IOException {
     AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(getModelPath());
     FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
     FileChannel fileChannel = inputStream.getChannel();
