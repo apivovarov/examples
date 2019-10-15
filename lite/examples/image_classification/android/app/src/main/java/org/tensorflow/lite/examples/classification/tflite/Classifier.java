@@ -45,6 +45,7 @@ public abstract class Classifier {
   public enum Model {
     FLOAT,
     QUANTIZED,
+    DLR_TF_MOBILENET,
     PASS
   }
 
@@ -52,8 +53,7 @@ public abstract class Classifier {
   public enum Device {
     CPU,
     NNAPI,
-    GPU,
-    PASS
+    GPU
   }
 
   /** Number of results to show in the UI. */
@@ -96,14 +96,17 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
-    if (device == Device.PASS) {
-      return new ClassifierPass(activity, device, numThreads);
-    }
+//    if (device == Device.PASS) {
+//      return new ClassifierPass(activity, device, numThreads);
+//    }
     if (model == Model.QUANTIZED) {
       return new ClassifierQuantizedMobileNet(activity, device, numThreads);
     }
     if (model == Model.FLOAT) {
       return new ClassifierFloatMobileNet(activity, device, numThreads);
+    }
+    if (model == Model.DLR_TF_MOBILENET) {
+      return new DLRFloatMobileNet(activity, device, numThreads);
     }
     return new ClassifierPass(activity, device, numThreads);
   }

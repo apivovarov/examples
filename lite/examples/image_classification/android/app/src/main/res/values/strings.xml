@@ -14,6 +14,7 @@
     <string-array name="models">
         <item>Quantized</item>
         <item>Float</item>
+        <item>DLR_TF_MobileNet</item>
         <item>Pass</item>
     </string-array>
 
@@ -22,6 +23,5 @@
         <item>CPU</item>
         <item>GPU</item>
         <item>NNAPI</item>
-        <item>PASS</item>
     </string-array>
 </resources>

@@ -16,11 +16,14 @@ limitations under the License.
 package org.tensorflow.lite.examples.classification.tflite;
 
 import android.app.Activity;
+import android.util.Log;
 
+import java.io.*;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.util.Arrays;
-import java.util.Random;
+import com.amazon.neo.dlr.DLR2;
+
 
 /** This TensorFlowLite classifier works with the float MobileNet model. */
 public class ClassifierPass extends Classifier {
@@ -30,6 +33,41 @@ public class ClassifierPass extends Classifier {
    * of the super class, because we need a primitive array here.
    */
   private float[][] labelProbArray;
+
+//  void printDir(File f) {
+//    File[] files = f.listFiles();
+//    for (File inFile : files) {
+//      if (inFile.isDirectory()) {
+//        Log.i("DLR", "- dir: " + inFile.toString());
+//        printDir(inFile);
+//      } else {
+//        Log.i("DLR", "- file: " + inFile.toString());
+//      }
+//    }
+//  }
+
+  private File createFileFromInputStream(InputStream inputStream, String filePath) {
+
+    try{
+      File f = new File(filePath);
+      OutputStream outputStream = new FileOutputStream(f);
+      byte buffer[] = new byte[1024];
+      int length = 0;
+
+      while((length=inputStream.read(buffer)) > 0) {
+        outputStream.write(buffer,0,length);
+      }
+
+      outputStream.close();
+      inputStream.close();
+
+      return f;
+    }catch (IOException e) {
+      //Logging exception
+    }
+
+    return null;
+  }
 
   /**
    * Initializes a {@code ClassifierFloatMobileNet}.
@@ -60,7 +98,7 @@ public class ClassifierPass extends Classifier {
     // you can download this file from
     // see build.gradle for where to obtain this file. It should be auto
     // downloaded into assets.
-    return "mobilenet_v1_1.0_224.tflite";
+    return "/data/user/0/org.tensorflow.lite.examples.classification/dlr_mobilenet_v1_1.0_224";
   }
 
   @Override
@@ -95,8 +133,21 @@ public class ClassifierPass extends Classifier {
 
   @Override
   protected void runInference() {
+
+//    long h = DLR2.createHandle();
+//    String s = DLR2.useHandle(h);
+//    Log.i("DLR2", s == null ? "NULL" : s);
+//    float[] arr = new float[10];
+//    arr[0]=22.2f;
+//    float res = DLR2.fillArr(arr);
+//    Log.i("res", "res: " + res);
+//    Log.i("arr", "arr0: " + arr[0]);
+//    Log.i("arr", "arr1: " + arr[1]);
+//    Log.i("arr", "arr2: " + arr[2]);
+//    Log.i("arr", "arr4: " + arr[4]);
+    double v = DLR2.passDouble(0.5);
     Arrays.fill(labelProbArray[0], 0.0f);
-    if (Math.random() > 0.5) {
+    if (Math.random() > v) {
       labelProbArray[0][284] = 0.998f;
       labelProbArray[0][285] = 0.61f;
       labelProbArray[0][286] = 0.51f;
