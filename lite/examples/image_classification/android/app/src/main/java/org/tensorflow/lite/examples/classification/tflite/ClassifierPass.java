@@ -16,13 +16,14 @@ limitations under the License.
 package org.tensorflow.lite.examples.classification.tflite;
 
 import android.app.Activity;
-import android.util.Log;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.MappedByteBuffer;
 import java.util.Arrays;
-import com.amazon.neo.dlr.DLR2;
 
 
 /** This TensorFlowLite classifier works with the float MobileNet model. */
@@ -145,7 +146,7 @@ public class ClassifierPass extends Classifier {
 //    Log.i("arr", "arr1: " + arr[1]);
 //    Log.i("arr", "arr2: " + arr[2]);
 //    Log.i("arr", "arr4: " + arr[4]);
-    double v = DLR2.passDouble(0.5);
+    double v = 0.5;//DLR2.passDouble(0.5);
     Arrays.fill(labelProbArray[0], 0.0f);
     if (Math.random() > v) {
       labelProbArray[0][284] = 0.998f;

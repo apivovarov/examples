@@ -1,18 +1,3 @@
-/* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-
 package org.tensorflow.lite.examples.classification.tflite;
 
 import android.app.Activity;
@@ -20,38 +5,42 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.amazon.neo.dlr.DLR;
-import static org.tensorflow.lite.examples.classification.env.ImageUtils.createFileFromInputStream;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
-/** This TensorFlowLite classifier works with the float MobileNet model. */
-public class DLRFloatMobileNet extends Classifier {
+import static org.tensorflow.lite.examples.classification.env.ImageUtils.createFileFromInputStream;
 
-  /** MobileNet requires additional normalization of the used input. */
-  private static final float IMAGE_MEAN = 127.5f;
-  private static final float IMAGE_STD = 127.5f;
+/** This TensorFlowLite classifier works with the float MobileNet model. */
+public abstract class DLRModelBase extends Classifier {
 
   /**
    * An array to hold inference results, to be feed into Tensorflow Lite as outputs. This isn't part
    * of the super class, because we need a primitive array here.
    */
-  private float[][] labelProbArray = null;
-
+  protected float[][] labelProbArray = null;
   protected long handle;
-
-  long[] inShape = new long[] {1,224,224,3};
-  int sz = 3*224*224;
-  float[] input = new float[sz];
+  protected String inName;
+  protected int inSz;
+  protected float[] input;
+  protected float[] inputCHW;
 
   /**
    * Initializes a {@code ClassifierFloatMobileNet}.
    *
    * @param activity
    */
-  public DLRFloatMobileNet(Activity activity, Device device, int numThreads)
+  public DLRModelBase(Activity activity)
       throws IOException {
     super(activity);
+    this.inSz = 1;
+    for (long v : getInShape()) {
+      this.inSz *= (int) v;
+    }
+    input = new float[inSz];
+    inputCHW = new float[inSz];
     labelProbArray = new float[1][getNumLabels()];
 
     AssetManager am = activity.getAssets();
@@ -74,19 +63,21 @@ public class DLRFloatMobileNet extends Classifier {
     //File f = new File(activity.getApplicationContext().getApplicationInfo().dataDir);
 
     //printDir(f);
-    labelProbArray = new float[1][getNumLabels()];
     handle = DLR.CreateDLRModel(fullModelPath, 1, 0);
     Log.i("DLR", "CreateDLRModel: " + handle);
     if (handle == 0) {
       Log.i("DLR", "DLRGetLastError: " + DLR.DLRGetLastError());
       throw new RuntimeException("CreateDLRModel failed");
     }
+    DLR.UseDLRCPUAffinity(handle,false);
+    // DLR.SetDLRNumThreads(handle, 4);
     Log.i("DLR", "GetDLRBackend: " + DLR.GetDLRBackend(handle));
     Log.i("DLR", "GetDLRNumInputs: " + DLR.GetDLRNumInputs(handle));
     Log.i("DLR", "GetDLRNumWeights: " + DLR.GetDLRNumWeights(handle));
     Log.i("DLR", "GetDLRNumOutputs: " + DLR.GetDLRNumOutputs(handle));
 
-    Log.i("DLR", "GetDLRInputName[0]: " + DLR.GetDLRInputName(handle, 0));
+    inName = DLR.GetDLRInputName(handle, 0);
+    Log.i("DLR", "GetDLRInputName[0]: " + inName);
     Log.i("DLR", "GetDLRWeightName[4]: " + DLR.GetDLRWeightName(handle, 4));
     // GetDLROutputSize and Dim
     int outDim = DLR.GetDLROutputDim(handle, 0);
@@ -102,6 +93,10 @@ public class DLRFloatMobileNet extends Classifier {
     Log.i("DLR", "GetDLROutputShape[0]: " + Arrays.toString(out_shape));
   }
 
+  protected abstract long[] getInShape();
+
+  protected abstract boolean isNCHW();
+
   @Override
   public int getImageSizeX() {
     return 224;
@@ -112,29 +107,13 @@ public class DLRFloatMobileNet extends Classifier {
     return 224;
   }
 
-  @Override
-  protected String getModelPath() {
-    // you can download this file from
-    // see build.gradle for where to obtain this file. It should be auto
-    // downloaded into assets.
-    return "dlr_mobilenet_v1_1.0_224";
-  }
-
-  @Override
-  protected String getLabelPath() {
-    return "labels.txt";
+  protected int getFrameSize() {
+    return 50176;
   }
 
   @Override
   protected int getNumBytesPerChannel() {
     return 4; // Float.SIZE / Byte.SIZE;
-  }
-
-  @Override
-  protected void addPixelValue(int pixelValue) {
-    imgData.putFloat((((pixelValue >> 16) & 0xFF) - IMAGE_MEAN) / IMAGE_STD);
-    imgData.putFloat((((pixelValue >> 8) & 0xFF) - IMAGE_MEAN) / IMAGE_STD);
-    imgData.putFloat(((pixelValue & 0xFF) - IMAGE_MEAN) / IMAGE_STD);
   }
 
   @Override
@@ -156,8 +135,22 @@ public class DLRFloatMobileNet extends Classifier {
   protected void runInference() {
     //Log.i("DLR", "img.HasArray: " + imgData.hasArray() + ", len: " + imgData.array().length);
     imgData.rewind();
-    imgData.asFloatBuffer().get(input, 0, sz);
-    if (DLR.SetDLRInput(handle, "input", inShape, input, 4) != 0) {
+    imgData.asFloatBuffer().get(input, 0, inSz);
+    float[] theInput;
+    if (isNCHW()) {
+      for (int i = 0; i < getFrameSize(); i++) {
+        inputCHW[i] = input[3 * i];
+        inputCHW[getFrameSize() + i] = input[3 * i + 1];
+        inputCHW[getFrameSize() * 2 + i] = input[3 * i + 2];
+      }
+      //Log.i("HWC", "(" + input[150525] + "," + input[150526] + "," + input[150527] + ")");
+      //Log.i("CHW", "(" + inputCHW[50175] + "," + inputCHW[100351] + "," + inputCHW[150527] + ")");
+      theInput = inputCHW;
+    } else {
+      theInput = input;
+    }
+
+    if (DLR.SetDLRInput(handle, inName, getInShape(), theInput, 4) != 0) {
       Log.i("DLR", "DLRGetLastError: " + DLR.DLRGetLastError());
       throw new RuntimeException("SetDLRInput failed");
     }

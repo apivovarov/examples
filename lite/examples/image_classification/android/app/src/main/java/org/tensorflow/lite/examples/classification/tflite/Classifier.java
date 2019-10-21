@@ -46,6 +46,11 @@ public abstract class Classifier {
     FLOAT,
     QUANTIZED,
     DLR_TF_MOBILENET,
+    DLR_TF_RESNET,
+    DLR_GLUONCV_MOBILENET_V2_075,
+    DLR_GLUONCV_MOBILENET_V2_100,
+    DLR_GLUONCV_RESNET18_V2,
+    DLR_GLUONCV_RESNET50_V2,
     PASS
   }
 
@@ -106,7 +111,19 @@ public abstract class Classifier {
       return new ClassifierFloatMobileNet(activity, device, numThreads);
     }
     if (model == Model.DLR_TF_MOBILENET) {
-      return new DLRFloatMobileNet(activity, device, numThreads);
+      return new DLRTFMobilenet_v1(activity);
+    }
+    if (model == Model.DLR_GLUONCV_MOBILENET_V2_075) {
+      return new DLRGluonCVMobileNetV2_075(activity);
+    }
+    if (model == Model.DLR_GLUONCV_MOBILENET_V2_100) {
+      return new DLRGluonCVMobileNetV2_100(activity);
+    }
+    if (model == Model.DLR_GLUONCV_RESNET18_V2) {
+      return new DLRGluonCVResNet18(activity);
+    }
+    if (model == Model.DLR_GLUONCV_RESNET50_V2) {
+      return new DLRGluonCVResNet50(activity);
     }
     return new ClassifierPass(activity, device, numThreads);
   }

@@ -161,7 +161,8 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
           });
       return;
     }
-    if (device != Device.CPU && model == Model.DLR_TF_MOBILENET) {
+
+    if (device != Device.CPU && model.name().startsWith("DLR")) {
       LOGGER.d("Not creating classifier: " + device + " doesn't support DLR models.");
       runOnUiThread(
               () -> {
