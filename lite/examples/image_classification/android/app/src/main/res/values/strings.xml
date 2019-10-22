@@ -15,6 +15,7 @@
         <item>Quantized</item>
         <item>Float</item>
         <item>DLR_TF_MobileNet</item>
+        <item>DLR_Keras_MobileNet_v2</item>
         <item>DLR_GluonCV_MobileNet_v2_075</item>
         <item>DLR_GluonCV_MobileNet_v2_100</item>
         <item>DLR_GluonCV_ResNet18_v2</item>

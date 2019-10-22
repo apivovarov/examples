@@ -46,7 +46,7 @@ public abstract class Classifier {
     FLOAT,
     QUANTIZED,
     DLR_TF_MOBILENET,
-    DLR_TF_RESNET,
+    DLR_KERAS_MOBILENET_V2,
     DLR_GLUONCV_MOBILENET_V2_075,
     DLR_GLUONCV_MOBILENET_V2_100,
     DLR_GLUONCV_RESNET18_V2,
@@ -112,6 +112,9 @@ public abstract class Classifier {
     }
     if (model == Model.DLR_TF_MOBILENET) {
       return new DLRTFMobilenet_v1(activity);
+    }
+    if (model == Model.DLR_KERAS_MOBILENET_V2) {
+      return new DLRKerasMobileNetV2(activity);
     }
     if (model == Model.DLR_GLUONCV_MOBILENET_V2_075) {
       return new DLRGluonCVMobileNetV2_075(activity);
