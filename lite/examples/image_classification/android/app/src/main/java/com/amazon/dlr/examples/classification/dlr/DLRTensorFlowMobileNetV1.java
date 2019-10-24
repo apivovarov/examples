@@ -4,8 +4,8 @@ import android.app.Activity;
 
 import java.io.IOException;
 
-/** This is DLRTensorflowMobilenet_v1. */
-public class DLRTensorflowMobilenet_v1 extends DLRModelBase {
+/** This is DLRTensorFlowMobileNetV1. */
+public class DLRTensorFlowMobileNetV1 extends DLRModelBase {
 
     /** MobileNet requires additional normalization of the used input. */
     private static final float IMAGE_MEAN = 127.5f;
@@ -13,7 +13,7 @@ public class DLRTensorflowMobilenet_v1 extends DLRModelBase {
 
     protected static long[] inShape = new long[] {1,224,224,3};
 
-    public DLRTensorflowMobilenet_v1(Activity activity) throws IOException {
+    public DLRTensorFlowMobileNetV1(Activity activity) throws IOException {
         super(activity);
     }
 
@@ -29,7 +29,7 @@ public class DLRTensorflowMobilenet_v1 extends DLRModelBase {
 
     @Override
     protected String getModelPath() {
-        return "dlr_mobilenet_v1_1.0_224";
+        return "dlr_tf_mobilenet_v1_100";
     }
 
     @Override

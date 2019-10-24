@@ -100,7 +100,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private Spinner deviceSpinner;
   private TextView threadsTextView;
 
-  private Classifier.Model model = Classifier.Model.TFLITE_MOBILENET_QUANTIZED;
+  private Classifier.Model model = Classifier.Model.TFLITE_MOBILENET_V1_QUANTIZED;
   private Classifier.Device device = Classifier.Device.CPU;
   private int numThreads = -1;
 

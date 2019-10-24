@@ -155,7 +155,7 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
       classifier.close();
       classifier = null;
     }
-    if (device == Device.GPU && model == Model.TFLITE_MOBILENET_QUANTIZED) {
+    if (device == Device.GPU && model == Model.TFLITE_MOBILENET_V1_QUANTIZED) {
       LOGGER.d("Not creating classifier: GPU doesn't support quantized models.");
       runOnUiThread(
           () -> {

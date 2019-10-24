@@ -7,6 +7,10 @@ import java.io.IOException;
 /** This is DLRKerasMobileNetV2. */
 public class DLRKerasMobileNetV2 extends DLRModelBase {
 
+    /** MobileNet requires additional normalization of the used input. */
+    private static final float IMAGE_MEAN = 127.5f;
+    private static final float IMAGE_STD = 127.5f;
+
     protected static long[] inShape = new long[] {1,3,224,224};
 
     public DLRKerasMobileNetV2(Activity activity) throws IOException {
@@ -30,9 +34,9 @@ public class DLRKerasMobileNetV2 extends DLRModelBase {
 
     @Override
     protected void addPixelValue(int pixelValue) {
-        imgData.putFloat((((pixelValue >> 16) & 0xFF) / 127.5f) - 1.0f);
-        imgData.putFloat((((pixelValue >> 8) & 0xFF) / 127.5f) - 1.0f);
-        imgData.putFloat(((pixelValue & 0xFF) / 127.5f) - 1.0f);
+        imgData.putFloat((((pixelValue >> 16) & 0xFF) - IMAGE_MEAN) / IMAGE_STD);
+        imgData.putFloat((((pixelValue >> 8) & 0xFF) - IMAGE_MEAN) / IMAGE_STD);
+        imgData.putFloat(((pixelValue & 0xFF) - IMAGE_MEAN) / IMAGE_STD);
     }
 
     @Override

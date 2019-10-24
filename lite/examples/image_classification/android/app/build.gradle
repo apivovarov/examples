@@ -28,6 +28,9 @@ android {
 // place them in the "assets" directory and comment out this line.
 apply from:'download.gradle'
 
+// task downloadDlrModels
+apply from:'download-dlr.gradle'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0'
@@ -38,8 +41,6 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
     implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
     implementation project(path: ':dlr-release')
-    //implementation 'dlr-release.aar'
-    //implementation files('libs/dlr-release.aar')
     // Use local TensorFlow library
     // implementation 'org.tensorflow:tensorflow-lite-local:0.0.0'
 }

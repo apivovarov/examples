@@ -27,7 +27,7 @@ public abstract class DLRModelBase extends Classifier {
   protected float[] inputCHW;
 
   /**
-   * Initializes a {@code ClassifierFloatMobileNet}.
+   * Initializes a {@code ClassifierFloatMobileNetV1}.
    *
    * @param activity
    */

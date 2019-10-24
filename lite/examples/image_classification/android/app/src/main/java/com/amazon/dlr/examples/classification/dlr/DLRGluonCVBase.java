@@ -25,12 +25,9 @@ public abstract class DLRGluonCVBase extends DLRModelBase {
 
     @Override
     protected void addPixelValue(int pixelValue) {
-        int r = ((pixelValue >> 16) & 0xFF);
-        int g = ((pixelValue >> 8) & 0xFF);
-        int b = (pixelValue & 0xFF);
-        float rf = (r - 123) / 58.395f;
-        float gf = (g - 117) / 57.12f;
-        float bf = (b - 104) / 57.375f;
+        float rf = (((pixelValue >> 16) & 0xFF) - 123) / 58.395f;
+        float gf = (((pixelValue >> 8) & 0xFF) - 117) / 57.12f;
+        float bf = ((pixelValue & 0xFF) - 104) / 57.375f;
         //Log.i("DLR", "(" + rf + ","+ gf + ","+ bf + ")");
         imgData.putFloat(rf);
         imgData.putFloat(gf);

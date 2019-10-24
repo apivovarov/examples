@@ -12,14 +12,14 @@
 
     <string name="model">Model:</string>
     <string-array name="models">
-        <item>TFLite_MobileNet_Quantized</item>
-        <item>TFLite_MobileNet_Float</item>
+        <item>TFLite_MobileNet_v1_Quantized</item>
+        <item>TFLite_MobileNet_v1_Float</item>
         <item>DLR_GluonCV_MobileNet_v2_075</item>
         <item>DLR_GluonCV_MobileNet_v2_100</item>
         <item>DLR_GluonCV_ResNet18_v2</item>
         <item>DLR_GluonCV_ResNet50_v2</item>
         <item>DLR_Keras_MobileNet_v2</item>
-        <item>DLR_Tensorflow_MobileNet</item>
+        <item>DLR_Tensorflow_MobileNet_v1</item>
         <item>Pass</item>
     </string-array>
 

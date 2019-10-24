@@ -41,7 +41,7 @@ import com.amazon.dlr.examples.classification.dlr.DLRGluonCVMobileNetV2_100;
 import com.amazon.dlr.examples.classification.dlr.DLRGluonCVResNet18;
 import com.amazon.dlr.examples.classification.dlr.DLRGluonCVResNet50;
 import com.amazon.dlr.examples.classification.dlr.DLRKerasMobileNetV2;
-import com.amazon.dlr.examples.classification.dlr.DLRTensorflowMobilenet_v1;
+import com.amazon.dlr.examples.classification.dlr.DLRTensorFlowMobileNetV1;
 import com.amazon.dlr.examples.classification.env.Logger;
 import org.tensorflow.lite.gpu.GpuDelegate;
 
@@ -51,9 +51,9 @@ public abstract class Classifier {
 
   /** The model type used for classification. */
   public enum Model {
-    TFLITE_MOBILENET_FLOAT,
-    TFLITE_MOBILENET_QUANTIZED,
-    DLR_TENSORFLOW_MOBILENET,
+    TFLITE_MOBILENET_V1_FLOAT,
+    TFLITE_MOBILENET_V1_QUANTIZED,
+    DLR_TENSORFLOW_MOBILENET_V1,
     DLR_KERAS_MOBILENET_V2,
     DLR_GLUONCV_MOBILENET_V2_075,
     DLR_GLUONCV_MOBILENET_V2_100,
@@ -109,14 +109,14 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
-    if (model == Model.TFLITE_MOBILENET_QUANTIZED) {
-      return new ClassifierQuantizedMobileNet(activity, device, numThreads);
+    if (model == Model.TFLITE_MOBILENET_V1_QUANTIZED) {
+      return new ClassifierQuantizedMobileNetV1(activity, device, numThreads);
     }
-    if (model == Model.TFLITE_MOBILENET_FLOAT) {
-      return new ClassifierFloatMobileNet(activity, device, numThreads);
+    if (model == Model.TFLITE_MOBILENET_V1_FLOAT) {
+      return new ClassifierFloatMobileNetV1(activity, device, numThreads);
     }
-    if (model == Model.DLR_TENSORFLOW_MOBILENET) {
-      return new DLRTensorflowMobilenet_v1(activity);
+    if (model == Model.DLR_TENSORFLOW_MOBILENET_V1) {
+      return new DLRTensorFlowMobileNetV1(activity);
     }
     if (model == Model.DLR_KERAS_MOBILENET_V2) {
       return new DLRKerasMobileNetV2(activity);
