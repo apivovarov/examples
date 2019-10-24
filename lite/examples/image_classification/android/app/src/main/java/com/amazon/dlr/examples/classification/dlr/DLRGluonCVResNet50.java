@@ -1,10 +1,11 @@
-package org.tensorflow.lite.examples.classification.tflite;
+package com.amazon.dlr.examples.classification.dlr;
 
 import android.app.Activity;
 
 import java.io.IOException;
 
-public class DLRGluonCVResNet50 extends DLRGluonCVResNet18 {
+/** This is DLRGluonCVResNet50. */
+public class DLRGluonCVResNet50 extends DLRGluonCVBase {
 
     public DLRGluonCVResNet50(Activity activity) throws IOException {
         super(activity);

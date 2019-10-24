@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.tensorflow.lite.examples.classification;
+package com.amazon.dlr.examples.classification;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -59,8 +59,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import org.tensorflow.lite.examples.classification.customview.AutoFitTextureView;
-import org.tensorflow.lite.examples.classification.env.Logger;
+
+import com.amazon.dlr.examples.classification.R;
+
+import com.amazon.dlr.examples.classification.customview.AutoFitTextureView;
+import com.amazon.dlr.examples.classification.env.Logger;
 
 public class CameraConnectionFragment extends Fragment {
   private static final Logger LOGGER = new Logger();

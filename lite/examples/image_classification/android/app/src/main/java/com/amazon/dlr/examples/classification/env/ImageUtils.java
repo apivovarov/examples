@@ -13,11 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package org.tensorflow.lite.examples.classification.env;
+package com.amazon.dlr.examples.classification.env;
 
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Environment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -220,26 +222,25 @@ public class ImageUtils {
     return matrix;
   }
 
-  public static File createFileFromInputStream(InputStream inputStream, String filePath) {
-
-    try{
-      File f = new File(filePath);
-      OutputStream outputStream = new FileOutputStream(f);
-      byte buffer[] = new byte[1024];
-      int length = 0;
-
-      while((length=inputStream.read(buffer)) > 0) {
-        outputStream.write(buffer,0,length);
+  public static void createFileFromInputStream(InputStream inputStream, String filePath) throws IOException {
+    OutputStream os = new FileOutputStream(filePath);
+    byte buffer[] = new byte[1024];
+    int length = 0;
+    try {
+      while ((length = inputStream.read(buffer)) > 0) {
+        os.write(buffer, 0, length);
       }
-
-      outputStream.close();
-      inputStream.close();
-
-      return f;
-    }catch (IOException e) {
-      //Logging exception
+    } finally {
+      os.close();
     }
+  }
 
-    return null;
+  public static void copyFromAssets(AssetManager am, String name, String inputFolder, String outputFolder) throws IOException {
+    InputStream is = am.open(inputFolder + "/" + name);
+    try {
+      ImageUtils.createFileFromInputStream(is, outputFolder + "/" + name);
+    } finally {
+      is.close();
+    }
   }
 }

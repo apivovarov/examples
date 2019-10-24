@@ -1,9 +1,10 @@
-package org.tensorflow.lite.examples.classification.tflite;
+package com.amazon.dlr.examples.classification.dlr;
 
 import android.app.Activity;
 
 import java.io.IOException;
 
+/** This is DLRKerasMobileNetV2. */
 public class DLRKerasMobileNetV2 extends DLRModelBase {
 
     protected static long[] inShape = new long[] {1,3,224,224};

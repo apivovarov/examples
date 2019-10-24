@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.tensorflow.lite.examples.classification;
+package com.amazon.dlr.examples.classification;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -28,12 +28,15 @@ import android.util.TypedValue;
 import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
-import org.tensorflow.lite.examples.classification.env.BorderedText;
-import org.tensorflow.lite.examples.classification.env.ImageUtils;
-import org.tensorflow.lite.examples.classification.env.Logger;
-import org.tensorflow.lite.examples.classification.tflite.Classifier;
-import org.tensorflow.lite.examples.classification.tflite.Classifier.Device;
-import org.tensorflow.lite.examples.classification.tflite.Classifier.Model;
+
+import com.amazon.dlr.examples.classification.R;
+
+import com.amazon.dlr.examples.classification.env.BorderedText;
+import com.amazon.dlr.examples.classification.env.ImageUtils;
+import com.amazon.dlr.examples.classification.env.Logger;
+import com.amazon.dlr.examples.classification.tflite.Classifier;
+import com.amazon.dlr.examples.classification.tflite.Classifier.Device;
+import com.amazon.dlr.examples.classification.tflite.Classifier.Model;
 
 public class ClassifierActivity extends CameraActivity implements OnImageAvailableListener {
   private static final Logger LOGGER = new Logger();
@@ -152,11 +155,11 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
       classifier.close();
       classifier = null;
     }
-    if (device == Device.GPU && model == Model.QUANTIZED) {
+    if (device == Device.GPU && model == Model.TFLITE_MOBILENET_QUANTIZED) {
       LOGGER.d("Not creating classifier: GPU doesn't support quantized models.");
       runOnUiThread(
           () -> {
-            Toast.makeText(this, "GPU does not yet supported quantized models.", Toast.LENGTH_LONG)
+            Toast.makeText(this, "GPU doesn't support quantized models.", Toast.LENGTH_LONG)
                 .show();
           });
       return;
@@ -166,7 +169,7 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
       LOGGER.d("Not creating classifier: " + device + " doesn't support DLR models.");
       runOnUiThread(
               () -> {
-                Toast.makeText(this, device + " does not yet supported DLR models.", Toast.LENGTH_LONG)
+                Toast.makeText(this, device + " doesn't support DLR models.", Toast.LENGTH_LONG)
                         .show();
               });
       return;

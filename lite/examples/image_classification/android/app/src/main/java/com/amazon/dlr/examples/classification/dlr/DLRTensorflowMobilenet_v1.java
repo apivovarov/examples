@@ -1,10 +1,11 @@
-package org.tensorflow.lite.examples.classification.tflite;
+package com.amazon.dlr.examples.classification.dlr;
 
 import android.app.Activity;
 
 import java.io.IOException;
 
-public class DLRTFMobilenet_v1 extends DLRModelBase {
+/** This is DLRTensorflowMobilenet_v1. */
+public class DLRTensorflowMobilenet_v1 extends DLRModelBase {
 
     /** MobileNet requires additional normalization of the used input. */
     private static final float IMAGE_MEAN = 127.5f;
@@ -12,7 +13,7 @@ public class DLRTFMobilenet_v1 extends DLRModelBase {
 
     protected static long[] inShape = new long[] {1,224,224,3};
 
-    public DLRTFMobilenet_v1(Activity activity) throws IOException {
+    public DLRTensorflowMobilenet_v1(Activity activity) throws IOException {
         super(activity);
     }
 

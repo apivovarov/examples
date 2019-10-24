@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package org.tensorflow.lite.examples.classification.tflite;
+package com.amazon.dlr.examples.classification.tflite;
 
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
@@ -34,7 +34,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import org.tensorflow.lite.Interpreter;
-import org.tensorflow.lite.examples.classification.env.Logger;
+
+import com.amazon.dlr.examples.classification.dlr.ClassifierPass;
+import com.amazon.dlr.examples.classification.dlr.DLRGluonCVMobileNetV2_075;
+import com.amazon.dlr.examples.classification.dlr.DLRGluonCVMobileNetV2_100;
+import com.amazon.dlr.examples.classification.dlr.DLRGluonCVResNet18;
+import com.amazon.dlr.examples.classification.dlr.DLRGluonCVResNet50;
+import com.amazon.dlr.examples.classification.dlr.DLRKerasMobileNetV2;
+import com.amazon.dlr.examples.classification.dlr.DLRTensorflowMobilenet_v1;
+import com.amazon.dlr.examples.classification.env.Logger;
 import org.tensorflow.lite.gpu.GpuDelegate;
 
 /** A classifier specialized to label images using TensorFlow Lite. */
@@ -43,9 +51,9 @@ public abstract class Classifier {
 
   /** The model type used for classification. */
   public enum Model {
-    FLOAT,
-    QUANTIZED,
-    DLR_TF_MOBILENET,
+    TFLITE_MOBILENET_FLOAT,
+    TFLITE_MOBILENET_QUANTIZED,
+    DLR_TENSORFLOW_MOBILENET,
     DLR_KERAS_MOBILENET_V2,
     DLR_GLUONCV_MOBILENET_V2_075,
     DLR_GLUONCV_MOBILENET_V2_100,
@@ -101,17 +109,14 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
-//    if (device == Device.PASS) {
-//      return new ClassifierPass(activity, device, numThreads);
-//    }
-    if (model == Model.QUANTIZED) {
+    if (model == Model.TFLITE_MOBILENET_QUANTIZED) {
       return new ClassifierQuantizedMobileNet(activity, device, numThreads);
     }
-    if (model == Model.FLOAT) {
+    if (model == Model.TFLITE_MOBILENET_FLOAT) {
       return new ClassifierFloatMobileNet(activity, device, numThreads);
     }
-    if (model == Model.DLR_TF_MOBILENET) {
-      return new DLRTFMobilenet_v1(activity);
+    if (model == Model.DLR_TENSORFLOW_MOBILENET) {
+      return new DLRTensorflowMobilenet_v1(activity);
     }
     if (model == Model.DLR_KERAS_MOBILENET_V2) {
       return new DLRKerasMobileNetV2(activity);

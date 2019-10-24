@@ -1,26 +1,25 @@
-package org.tensorflow.lite.examples.classification.tflite;
+package com.amazon.dlr.examples.classification.dlr;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import com.amazon.dlr.examples.classification.tflite.Classifier;
 import com.amazon.neo.dlr.DLR;
+import com.amazon.dlr.examples.classification.env.ImageUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 
-import static org.tensorflow.lite.examples.classification.env.ImageUtils.createFileFromInputStream;
-
-/** This TensorFlowLite classifier works with the float MobileNet model. */
+/** This is DLRModelBase. */
 public abstract class DLRModelBase extends Classifier {
 
   /**
    * An array to hold inference results, to be feed into Tensorflow Lite as outputs. This isn't part
    * of the super class, because we need a primitive array here.
    */
-  protected float[][] labelProbArray = null;
+  protected float[][] labelProbArray;
   protected long handle;
   protected String inName;
   protected int inSz;
@@ -45,20 +44,14 @@ public abstract class DLRModelBase extends Classifier {
 
     AssetManager am = activity.getAssets();
 
-    File dd = new File(activity.getApplicationContext().getApplicationInfo().dataDir,
-            getModelPath());
+    String modelPath = getModelPath();
+    File dd = new File(activity.getApplicationContext().getApplicationInfo().dataDir, modelPath);
     String fullModelPath = dd.toString();
     dd.mkdir();
 
-    InputStream inputStream = am.open(getModelPath() + "/model.so");
-    createFileFromInputStream(inputStream, fullModelPath + "/model.so");
-    inputStream.close();
-    inputStream = am.open(getModelPath() + "/model.json");
-    createFileFromInputStream(inputStream, fullModelPath + "/model.json");
-    inputStream.close();
-    inputStream = am.open(getModelPath() + "/model.params");
-    createFileFromInputStream(inputStream, fullModelPath + "/model.params");
-    inputStream.close();
+    ImageUtils.copyFromAssets(am, "model.so", modelPath, fullModelPath);
+    ImageUtils.copyFromAssets(am, "model.json", modelPath, fullModelPath);
+    ImageUtils.copyFromAssets(am, "model.params", modelPath, fullModelPath);
 
     //File f = new File(activity.getApplicationContext().getApplicationInfo().dataDir);
 

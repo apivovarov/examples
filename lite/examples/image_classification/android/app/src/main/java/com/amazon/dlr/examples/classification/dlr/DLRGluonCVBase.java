@@ -1,14 +1,15 @@
-package org.tensorflow.lite.examples.classification.tflite;
+package com.amazon.dlr.examples.classification.dlr;
 
 import android.app.Activity;
 
 import java.io.IOException;
 
-public class DLRGluonCVResNet18 extends DLRModelBase {
+/** This is DLRGluonCVBase. */
+public abstract class DLRGluonCVBase extends DLRModelBase {
 
     protected static long[] inShape = new long[] {1,3,224,224};
 
-    public DLRGluonCVResNet18(Activity activity) throws IOException {
+    public DLRGluonCVBase(Activity activity) throws IOException {
         super(activity);
     }
 
@@ -20,11 +21,6 @@ public class DLRGluonCVResNet18 extends DLRModelBase {
     @Override
     protected boolean isNCHW() {
         return true;
-    }
-
-    @Override
-    protected String getModelPath() {
-        return "dlr_gluoncv_resnet18_v2";
     }
 
     @Override
