@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DLRImageClassification</string>
+    <string name="app_name">NeoImageClassification</string>
     <string name="description_info">Info</string>
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
@@ -7,6 +7,7 @@
     <string name="toggle_turn_off">NN:Off</string>
     <string name="toggle">Use NNAPI</string>
     <string name="dlr">DLR</string>
+    <string name="neo">Neo</string>
     <string name="nnapi">NNAPI</string>
     <string name="threads">Threads:</string>
 
