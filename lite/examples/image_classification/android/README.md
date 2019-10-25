@@ -1,4 +1,4 @@
-# Neo Ai DLR image classification Android example application
+# Neo AI DLR image classification Android example application
 
 ## Overview
 
@@ -17,17 +17,9 @@ running the demo on an Android device. For an explanation of the source, see
 
 <!-- TODO(b/124116863): Add app screenshot. -->
 
-### DLR Release AAR
-
-Download dlr-release.aar file by running
-```
-./download-dependencies.sh
-```
-dlr-release.aar will be downloaded to dlr-release folder.
-
 ### Models
 
-App Uses the following models:
+App Uses the following Neo pre-compiled models:
 * gluoncv_mobilenet_v2_075
 * gluoncv_resnet18_v2
 * gluoncv_mobilenet_v2_100
@@ -57,12 +49,6 @@ application.
 git clone --recursive https://github.com/neo-ai/neo-ai-dlr.git
 ```
 
-Open the neo-ai-dlr/examples/android/image_classification project in Android Studio. To do this, open Android
-Studio and select `Open an existing project`, setting the folder to
-`neo-ai-dlr/examples/android/image_classification`
-
-<img src="images/classifydemo_img1.png?raw=true" />
-
 ### Step 2. Download dlr-release.aar
 Download dlr-release.aar file by running
 ```
@@ -78,28 +64,32 @@ Set device arch in app/download.gradle (arm64-v8a, armeabi-v7a, x86_64, x86) bef
 ```
 The models will be downloaded and extracted to app assets folder.
 
-### Step 4. Build the Android Studio project
+### Step 4. Open the image_classification project in Android Studio.
+To do this, open Android Studio and select `Open an existing project`, setting the folder to
+`neo-ai-dlr/examples/android/image_classification`
+
+<img src="images/classifydemo_img1.png?raw=true" />
+
+
+### Step 5. Build the Android Studio project
 
 Select `Build -> Make Project` and check that the project builds successfully.
 You will need Android SDK configured in the settings. You'll need at least SDK
 version 23. The `build.gradle` file will prompt you to download any missing
 libraries.
 
-The file `download.gradle` directs gradle to download the two models used in the
-example, placing them into `assets`.
-
 <img src="images/classifydemo_img4.png?raw=true" style="width: 40%" />
 
 <img src="images/classifydemo_img2.png?raw=true" style="width: 60%" />
 
-<aside class="note"><b>Note:</b><p>`build.gradle` is configured to use
-TensorFlow Lite's nightly build.</p><p>If you see a build error related to
-compatibility with Tensorflow Lite's Java API (for example, `method X is
-undefined for type Interpreter`), there has likely been a backwards compatible
-change to the API. You will need to run `git pull` in the examples repo to
-obtain a version that is compatible with the nightly build.</p></aside>
+<aside class="note"><b>Note:</b><p>`download-dependencies.sh` downloads the latest
+dlr-release.aar library.</p><p>If you see a build error related to
+compatibility with DLR Java API (for example, `method X is
+undefined for type DLR`), there has likely been a backwards compatible
+change to the API. You will need to run `git pull` in the neo-ai-dlr repo to
+obtain a version that is compatible with the latest dlr-release.aar.</p></aside>
 
-### Step 5. Install and run the app
+### Step 6. Install and run the app
 
 Connect the Android device to the computer and be sure to approve any ADB
 permission prompts that appear on your phone. Select `Run -> Run app.` Select
