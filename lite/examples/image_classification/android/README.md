@@ -50,11 +50,11 @@ git clone --recursive https://github.com/neo-ai/neo-ai-dlr.git
 ```
 
 ### Step 2. Download dlr-release.aar
-Download dlr-release.aar file by running
+Download `dlr-release.aar` file by running
 ```
 ./download-dependencies.sh
 ```
-dlr-release.aar will be downloaded to dlr-release folder.
+dlr-release.aar will be downloaded to `dlr-release` folder.
 
 ### Step 3. Download pre-compiled models
 Download pre-compiled models by running gradle task downloadDlrModels.
@@ -110,4 +110,4 @@ Re-installing the app may require you to uninstall the previous installations.
 
 ## Assets folder
 _Do not delete the assets folder content_. If you explicitly deleted the
-folders/files, download models as described in Step 3.
+folders/files, download Neo pre-compiled models as described in Step 3.
