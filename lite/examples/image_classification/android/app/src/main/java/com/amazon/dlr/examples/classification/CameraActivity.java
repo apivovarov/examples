@@ -39,7 +39,6 @@ import androidx.annotation.UiThread;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.amazon.dlr.examples.classification.env.ImageUtils;
 import com.amazon.dlr.examples.classification.env.Logger;
-import com.amazon.dlr.examples.classification.tflite.Classifier;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -56,8 +55,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.nio.ByteBuffer;
 import java.util.List;
-
-import com.amazon.dlr.examples.classification.R;
 
 public abstract class CameraActivity extends AppCompatActivity
     implements OnImageAvailableListener,
@@ -100,7 +97,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private Spinner deviceSpinner;
   private TextView threadsTextView;
 
-  private Classifier.Model model = Classifier.Model.TFLITE_MOBILENET_V1_QUANTIZED;
+  private Classifier.Model model = Classifier.Model.DLR_GLUONCV_MOBILENET_V2_075;
   private Classifier.Device device = Classifier.Device.CPU;
   private int numThreads = -1;
 

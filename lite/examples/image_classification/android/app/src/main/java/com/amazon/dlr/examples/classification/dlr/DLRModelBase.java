@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.amazon.dlr.examples.classification.tflite.Classifier;
+import com.amazon.dlr.examples.classification.Classifier;
 import com.amazon.neo.dlr.DLR;
 import com.amazon.dlr.examples.classification.env.ImageUtils;
 

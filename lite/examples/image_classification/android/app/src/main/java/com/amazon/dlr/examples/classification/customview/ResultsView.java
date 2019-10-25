@@ -16,7 +16,7 @@ limitations under the License.
 package com.amazon.dlr.examples.classification.customview;
 
 import java.util.List;
-import com.amazon.dlr.examples.classification.tflite.Classifier.Recognition;
+import com.amazon.dlr.examples.classification.Classifier.Recognition;
 
 public interface ResultsView {
   public void setResults(final List<Recognition> results);

@@ -2,10 +2,9 @@ package com.amazon.dlr.examples.classification.dlr;
 
 import android.app.Activity;
 
-import com.amazon.dlr.examples.classification.tflite.Classifier;
+import com.amazon.dlr.examples.classification.Classifier;
 
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
 import java.util.Arrays;
 
 
@@ -39,9 +38,6 @@ public class ClassifierPass extends Classifier {
     return 224;
   }
 
-  protected MappedByteBuffer loadModelFile(Activity activity) throws IOException {
-    return null;
-  }
   @Override
   protected String getModelPath() {
     return "";

@@ -29,14 +29,11 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
-import com.amazon.dlr.examples.classification.R;
-
 import com.amazon.dlr.examples.classification.env.BorderedText;
 import com.amazon.dlr.examples.classification.env.ImageUtils;
 import com.amazon.dlr.examples.classification.env.Logger;
-import com.amazon.dlr.examples.classification.tflite.Classifier;
-import com.amazon.dlr.examples.classification.tflite.Classifier.Device;
-import com.amazon.dlr.examples.classification.tflite.Classifier.Model;
+import com.amazon.dlr.examples.classification.Classifier.Device;
+import com.amazon.dlr.examples.classification.Classifier.Model;
 
 public class ClassifierActivity extends CameraActivity implements OnImageAvailableListener {
   private static final Logger LOGGER = new Logger();
@@ -154,15 +151,6 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
       LOGGER.d("Closing classifier.");
       classifier.close();
       classifier = null;
-    }
-    if (device == Device.GPU && model == Model.TFLITE_MOBILENET_V1_QUANTIZED) {
-      LOGGER.d("Not creating classifier: GPU doesn't support quantized models.");
-      runOnUiThread(
-          () -> {
-            Toast.makeText(this, "GPU doesn't support quantized models.", Toast.LENGTH_LONG)
-                .show();
-          });
-      return;
     }
 
     if (device != Device.CPU && model.name().startsWith("DLR")) {

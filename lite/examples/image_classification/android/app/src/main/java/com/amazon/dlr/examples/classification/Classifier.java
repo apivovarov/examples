@@ -13,27 +13,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package com.amazon.dlr.examples.classification.tflite;
+package com.amazon.dlr.examples.classification;
 
 import android.app.Activity;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.os.SystemClock;
 import android.os.Trace;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-import org.tensorflow.lite.Interpreter;
 
 import com.amazon.dlr.examples.classification.dlr.ClassifierPass;
 import com.amazon.dlr.examples.classification.dlr.DLRGluonCVMobileNetV2_075;
@@ -43,7 +38,6 @@ import com.amazon.dlr.examples.classification.dlr.DLRGluonCVResNet50;
 import com.amazon.dlr.examples.classification.dlr.DLRKerasMobileNetV2;
 import com.amazon.dlr.examples.classification.dlr.DLRTensorFlowMobileNetV1;
 import com.amazon.dlr.examples.classification.env.Logger;
-import org.tensorflow.lite.gpu.GpuDelegate;
 
 /** A classifier specialized to label images using TensorFlow Lite. */
 public abstract class Classifier {
@@ -51,8 +45,6 @@ public abstract class Classifier {
 
   /** The model type used for classification. */
   public enum Model {
-    TFLITE_MOBILENET_V1_FLOAT,
-    TFLITE_MOBILENET_V1_QUANTIZED,
     DLR_TENSORFLOW_MOBILENET_V1,
     DLR_KERAS_MOBILENET_V2,
     DLR_GLUONCV_MOBILENET_V2_075,
@@ -65,8 +57,6 @@ public abstract class Classifier {
   /** The runtime device type used for executing classification. */
   public enum Device {
     CPU,
-    NNAPI,
-    GPU
   }
 
   /** Number of results to show in the UI. */
@@ -80,20 +70,8 @@ public abstract class Classifier {
   /** Preallocated buffers for storing image data in. */
   private final int[] intValues = new int[getImageSizeX() * getImageSizeY()];
 
-  /** Options for configuring the Interpreter. */
-  private final Interpreter.Options tfliteOptions = new Interpreter.Options();
-
-  /** The loaded TensorFlow Lite model. */
-  private MappedByteBuffer tfliteModel;
-
   /** Labels corresponding to the output of the vision model. */
   private List<String> labels;
-
-  /** Optional GPU delegate for accleration. */
-  private GpuDelegate gpuDelegate = null;
-
-  /** An instance of the driver class to run model inference with Tensorflow Lite. */
-  protected Interpreter tflite;
 
   /** A ByteBuffer to hold image data, to be feed into Tensorflow Lite as inputs. */
   protected ByteBuffer imgData = null;
@@ -109,12 +87,6 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
-    if (model == Model.TFLITE_MOBILENET_V1_QUANTIZED) {
-      return new ClassifierQuantizedMobileNetV1(activity, device, numThreads);
-    }
-    if (model == Model.TFLITE_MOBILENET_V1_FLOAT) {
-      return new ClassifierFloatMobileNetV1(activity, device, numThreads);
-    }
     if (model == Model.DLR_TENSORFLOW_MOBILENET_V1) {
       return new DLRTensorFlowMobileNetV1(activity);
     }
@@ -221,20 +193,6 @@ public abstract class Classifier {
 
   /** Initializes a {@code Classifier}. */
   protected Classifier(Activity activity, Device device, int numThreads) throws IOException {
-    tfliteModel = loadModelFile(activity);
-    switch (device) {
-      case NNAPI:
-        tfliteOptions.setUseNNAPI(true);
-        break;
-      case GPU:
-        gpuDelegate = new GpuDelegate();
-        tfliteOptions.addDelegate(gpuDelegate);
-        break;
-      case CPU:
-        break;
-    }
-    tfliteOptions.setNumThreads(numThreads);
-    tflite = new Interpreter(tfliteModel, tfliteOptions);
     labels = loadLabelList(activity);
     imgData =
         ByteBuffer.allocateDirect(
@@ -258,16 +216,6 @@ public abstract class Classifier {
     }
     reader.close();
     return labels;
-  }
-
-  /** Memory-map the model file in Assets. */
-  protected MappedByteBuffer loadModelFile(Activity activity) throws IOException {
-    AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(getModelPath());
-    FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
-    FileChannel fileChannel = inputStream.getChannel();
-    long startOffset = fileDescriptor.getStartOffset();
-    long declaredLength = fileDescriptor.getDeclaredLength();
-    return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
   }
 
   /** Writes Image data into a {@code ByteBuffer}. */
@@ -337,15 +285,6 @@ public abstract class Classifier {
 
   /** Closes the interpreter and model to release resources. */
   public void close() {
-    if (tflite != null) {
-      tflite.close();
-      tflite = null;
-    }
-    if (gpuDelegate != null) {
-      gpuDelegate.close();
-      gpuDelegate = null;
-    }
-    tfliteModel = null;
   }
 
   /**
