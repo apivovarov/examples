@@ -153,7 +153,7 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
       classifier = null;
     }
 
-    if (device != Device.CPU && model.name().startsWith("DLR")) {
+    if (device != Device.CPU) {
       LOGGER.d("Not creating classifier: " + device + " doesn't support DLR models.");
       runOnUiThread(
               () -> {

@@ -97,7 +97,7 @@ public abstract class CameraActivity extends AppCompatActivity
   private Spinner deviceSpinner;
   private TextView threadsTextView;
 
-  private Classifier.Model model = Classifier.Model.DLR_GLUONCV_MOBILENET_V2_075;
+  private Classifier.Model model = Classifier.Model.GLUONCV_MOBILENET_V2_075;
   private Classifier.Device device = Classifier.Device.CPU;
   private int numThreads = -1;
 

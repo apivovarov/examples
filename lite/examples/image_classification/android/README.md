@@ -2,28 +2,39 @@
 
 ## Overview
 
-This is an example application for [TensorFlow Lite](https://tensorflow.org/lite)
+This is an example application for [neo-ai-dlr](https://github.com/neo-ai/neo-ai-dlr)
 on Android. It uses
-[Image classification](https://www.tensorflow.org/lite/models/image_classification/overview)
+Image classification models from different frameworks
 to continuously classify whatever it sees from the device's back camera.
-Inference is performed using the TensorFlow Lite Java API. The demo app
+Inference is performed using the DLR Java API. The demo app
 classifies frames in real-time, displaying the top most probable
-classifications. It allows the user to choose between a floating point or
-[quantized](https://www.tensorflow.org/lite/performance/post_training_quantization)
-model, select the thread count, and decide whether to run on CPU, GPU, or via
-[NNAPI](https://developer.android.com/ndk/guides/neuralnetworks).
+classifications. It allows the user to choose between MobileNet or ResNet
+models from different frameworks
 
 These instructions walk you through building and
 running the demo on an Android device. For an explanation of the source, see
-[TensorFlow Lite Android image classification example](https://www.tensorflow.org/lite/models/image_classification/android).
+[DLR Android image classification example](https://github.com/neo-ai/neo-ai-dlr/tree/master/examples/android/image_classification).
 
 <!-- TODO(b/124116863): Add app screenshot. -->
 
-### Model
-For details of the model used, visit [Image classification](https://www.tensorflow.org/lite/models/image_classification/overview).
+### DLR Release AAR
 
-Downloading, extracting, and placing the model in the assets folder is managed
-automatically by download.gradle.
+Download dlr-release.aar file by running
+```
+./download-dependencies.sh
+```
+dlr-release.aar will be downloaded to dlr-release folder.
+
+### Models
+
+App Uses the following models:
+* gluoncv_mobilenet_v2_075
+* gluoncv_resnet18_v2
+* gluoncv_mobilenet_v2_100
+* gluoncv_resnet50_v2
+* keras_mobilenet_v2
+* tf_mobilenet_v1_100
+
 
 ## Requirements
 
@@ -39,20 +50,35 @@ automatically by download.gradle.
 
 ### Step 1. Clone the TensorFlow examples source code
 
-Clone the TensorFlow examples GitHub repository to your computer to get the demo
+Clone the neo-ai-dlr GitHub repository to your computer to get the demo
 application.
 
 ```
-git clone https://github.com/tensorflow/examples
+git clone --recursive https://github.com/neo-ai/neo-ai-dlr.git
 ```
 
-Open the TensorFlow source code in Android Studio. To do this, open Android
+Open the neo-ai-dlr/examples/android/image_classification project in Android Studio. To do this, open Android
 Studio and select `Open an existing project`, setting the folder to
-`examples/lite/examples/image_classification/android`
+`neo-ai-dlr/examples/android/image_classification`
 
 <img src="images/classifydemo_img1.png?raw=true" />
 
-### Step 2. Build the Android Studio project
+### Step 2. Download dlr-release.aar
+Download dlr-release.aar file by running
+```
+./download-dependencies.sh
+```
+dlr-release.aar will be downloaded to dlr-release folder.
+
+### Step 3. Download pre-compiled models
+Download pre-compiled models by running gradle task downloadDlrModels.
+Set device arch in app/download.gradle (arm64-v8a, armeabi-v7a, x86_64, x86) before running the command
+```
+./gradlew downloadDlrModels
+```
+The models will be downloaded and extracted to app assets folder.
+
+### Step 4. Build the Android Studio project
 
 Select `Build -> Make Project` and check that the project builds successfully.
 You will need Android SDK configured in the settings. You'll need at least SDK
@@ -73,7 +99,7 @@ undefined for type Interpreter`), there has likely been a backwards compatible
 change to the API. You will need to run `git pull` in the examples repo to
 obtain a version that is compatible with the nightly build.</p></aside>
 
-### Step 3. Install and run the app
+### Step 5. Install and run the app
 
 Connect the Android device to the computer and be sure to approve any ADB
 permission prompts that appear on your phone. Select `Run -> Run app.` Select
@@ -94,5 +120,4 @@ Re-installing the app may require you to uninstall the previous installations.
 
 ## Assets folder
 _Do not delete the assets folder content_. If you explicitly deleted the
-files, choose `Build -> Rebuild` to re-download the deleted model files into the
-assets folder.
+folders/files, download models as described in Step 3.

@@ -45,12 +45,12 @@ public abstract class Classifier {
 
   /** The model type used for classification. */
   public enum Model {
-    DLR_TENSORFLOW_MOBILENET_V1,
-    DLR_KERAS_MOBILENET_V2,
-    DLR_GLUONCV_MOBILENET_V2_075,
-    DLR_GLUONCV_MOBILENET_V2_100,
-    DLR_GLUONCV_RESNET18_V2,
-    DLR_GLUONCV_RESNET50_V2,
+    TENSORFLOW_MOBILENET_V1,
+    KERAS_MOBILENET_V2,
+    GLUONCV_MOBILENET_V2_075,
+    GLUONCV_MOBILENET_V2_100,
+    GLUONCV_RESNET18_V2,
+    GLUONCV_RESNET50_V2,
     PASS
   }
 
@@ -87,22 +87,22 @@ public abstract class Classifier {
    */
   public static Classifier create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
-    if (model == Model.DLR_TENSORFLOW_MOBILENET_V1) {
+    if (model == Model.TENSORFLOW_MOBILENET_V1) {
       return new DLRTensorFlowMobileNetV1(activity);
     }
-    if (model == Model.DLR_KERAS_MOBILENET_V2) {
+    if (model == Model.KERAS_MOBILENET_V2) {
       return new DLRKerasMobileNetV2(activity);
     }
-    if (model == Model.DLR_GLUONCV_MOBILENET_V2_075) {
+    if (model == Model.GLUONCV_MOBILENET_V2_075) {
       return new DLRGluonCVMobileNetV2_075(activity);
     }
-    if (model == Model.DLR_GLUONCV_MOBILENET_V2_100) {
+    if (model == Model.GLUONCV_MOBILENET_V2_100) {
       return new DLRGluonCVMobileNetV2_100(activity);
     }
-    if (model == Model.DLR_GLUONCV_RESNET18_V2) {
+    if (model == Model.GLUONCV_RESNET18_V2) {
       return new DLRGluonCVResNet18(activity);
     }
-    if (model == Model.DLR_GLUONCV_RESNET50_V2) {
+    if (model == Model.GLUONCV_RESNET50_V2) {
       return new DLRGluonCVResNet50(activity);
     }
     return new ClassifierPass(activity, device, numThreads);
