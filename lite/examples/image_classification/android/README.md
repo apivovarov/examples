@@ -1,4 +1,4 @@
-# TensorFlow Lite image classification Android example application
+# Neo Ai DLR image classification Android example application
 
 ## Overview
 
